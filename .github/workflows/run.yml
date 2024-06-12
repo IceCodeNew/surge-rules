@@ -147,6 +147,7 @@ jobs:
           mkdir -p publish
           cp *.txt ./publish/
           mv ruleset ./publish/
+          ls -halF ./publish/ ./publish/ruleset/
 
       - name: Release and upload assets
         uses: softprops/action-gh-release@v2
