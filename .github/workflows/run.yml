@@ -33,6 +33,7 @@ jobs:
           echo "ICN_github=https://raw.githubusercontent.com/IceCodeNew/domain-list-community/release/github.txt" >> $GITHUB_ENV
           echo "ICN_lark_global=https://raw.githubusercontent.com/IceCodeNew/domain-list-community/release/lark-global.txt" >> $GITHUB_ENV
           echo "ICN_media=https://raw.githubusercontent.com/IceCodeNew/domain-list-community/release/category-media.txt" >> $GITHUB_ENV
+          echo "ICN_scholar_not_cn=https://raw.githubusercontent.com/IceCodeNew/domain-list-custom/release/category-scholar-!cn.txt" >> $GITHUB_ENV
           echo "ICN_social_media_not_cn=https://raw.githubusercontent.com/IceCodeNew/domain-list-community/release/category-social-media-!cn.txt" >> $GITHUB_ENV
           echo "ICN_twitter=https://raw.githubusercontent.com/IceCodeNew/domain-list-community/release/twitter.txt" >> $GITHUB_ENV
         shell: bash
@@ -143,6 +144,13 @@ jobs:
           curl -sSL "${ICN_media}" | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' >> media.txt
           curl -sSL "${ICN_media}" | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN,$2\n"' > ruleset/media.txt
           curl -sSL "${ICN_media}" | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN-SUFFIX,$2\n"' >> ruleset/media.txt
+
+      - name: Generate scholar-not-cn.txt file
+        run: |
+          curl -sSL "${ICN_scholar_not_cn}" | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > scholar-not-cn.txt
+          curl -sSL "${ICN_scholar_not_cn}" | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' >> scholar-not-cn.txt
+          curl -sSL "${ICN_scholar_not_cn}" | grep -Ev "^(regexp|keyword):" | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN,$2\n"' > ruleset/scholar-not-cn.txt
+          curl -sSL "${ICN_scholar_not_cn}" | grep -Ev "^(regexp|keyword|full):" | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "DOMAIN-SUFFIX,$2\n"' >> ruleset/scholar-not-cn.txt
 
       - name: Generate social-media-not-cn.txt file
         run: |
